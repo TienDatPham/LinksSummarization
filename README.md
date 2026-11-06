@@ -20,15 +20,19 @@ Five Claude skills for tidying up and archiving saved/shared content on **Facebo
 
 | Skill | Command | Read/Write | Purpose |
 |---|---|---|---|
-| [facebook-saved-categorizer](skills/facebook-saved-categorizer/SKILL.md) | `/facebook_saved_categorizer N` | Read-only | Categorizes the first N items on the Facebook Saved page into `facebook_saved_items.xlsx` (sheet "Saved items"). |
-| [facebook-unsave](skills/facebook-unsave/SKILL.md) | `/facebook-unsave N` | **Changes account** | Unsaves the first N items on the Facebook Saved page, after showing the list and getting a clear yes. |
-| [messenger-links-categorizer](skills/messenger-links-categorizer/SKILL.md) | `/messenger-links-categorizer 2026Q3` | Read-only | Categorizes shared links, posts and reels in the currently open Messenger chat for a quarter into `messenger_chat_items_<yyyyQx>.xlsx` (sheet "Chat items"). |
-| [messenger-unsend](skills/messenger-unsend/SKILL.md) | `/messenger-unsend 2026Q3` | **Irreversible** | Unsends (for everyone) the links/posts/reels you sent in the open chat for a quarter. Only acts on items with a found URL and high categorization confidence, after confirmation. |
+| [facebook-saved-categorizer](skills/facebook-saved-categorizer/SKILL.md) | `/facebook_saved_categorizer N` or `4-30` | Read-only | Categorizes items on the Facebook Saved page (first N, or a position range) into `facebook_saved_items_<start>-<end>.xlsx` (sheet "Saved items"). |
+| [facebook-unsave](skills/facebook-unsave/SKILL.md) | `/facebook-unsave N` or `4-30` | **Changes account** | Unsaves items on the Facebook Saved page (first N, or a position range), after showing the list and getting a clear yes. |
+| [messenger-links-categorizer](skills/messenger-links-categorizer/SKILL.md) | `/messenger-links-categorizer N` or `4-30` | Read-only | Categorizes shared links, posts and reels in the currently open Messenger chat (newest N, or a position range) into `messenger_chat_items_<start>-<end>.xlsx` (sheet "Chat items"). |
+| [messenger-unsend](skills/messenger-unsend/SKILL.md) | `/messenger-unsend N` or `4-30` | **Irreversible** | Unsends (for everyone) the links/posts/reels you sent in the open chat within a position range. Only acts on items with a found URL and high categorization confidence, after confirmation. |
 | [threads-reposts-categorizer](skills/threads-reposts-categorizer/SKILL.md) | `/threads-reposts-categorizer N` or `4-30` | Read-only | Categorizes reposts on your Threads Reposts tab into `threads_reposts_<handle>_<start>-<end>.xlsx` (sheet "Reposts"). |
+
+### Arguments
+
+All five skills take the same argument: `N` (positions 1 to N) or `start-end` (e.g. `4-30`, inclusive). Position 1 is the top of the Saved page, the newest shared item in the chat, or the most recently reposted Threads post. A categorizer and its action skill use the same numbering, so `/facebook_saved_categorizer 4-30` followed by `/facebook-unsave 4-30` refers to the same items (as long as the list has not changed in between).
 
 ### How they fit together
 
-- **Categorize first, clean up second.** `facebook-saved-categorizer` pairs with `facebook-unsave` (same Saved page, same top-N positions), and `messenger-links-categorizer` pairs with `messenger-unsend` (same chat, same quarter, same classification rules).
+- **Categorize first, clean up second.** `facebook-saved-categorizer` pairs with `facebook-unsave` (same Saved page, same top-N positions), and `messenger-links-categorizer` pairs with `messenger-unsend` (same chat, same positions, same classification rules).
 - The categorizer skills share one Excel template: `#`, (timestamp), title/caption, page/author, URL, type, category, summary, confidence, `Detail`, and an always-empty `Note` column as the last column for your own notes.
 - The destructive skills (`facebook-unsave`, `messenger-unsend`) never run without a numbered list and an explicit yes, and skip anything uncertain.
 
