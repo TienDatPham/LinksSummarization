@@ -32,7 +32,7 @@ All five skills take the same argument: `N` (positions 1 to N) or `start-end` (e
 
 ### How they fit together
 
-- **Categorize first, clean up second.** `facebook-saved-categorizer` pairs with `facebook-unsave` (same Saved page, same top-N positions), and `messenger-links-categorizer` pairs with `messenger-unsend` (same chat, same positions, same classification rules).
+- **Categorize first, clean up second.** `facebook-saved-categorizer` pairs with `facebook-unsave` (same Saved page, same positions), and `messenger-links-categorizer` pairs with `messenger-unsend` (same chat, same positions, same classification rules).
 - The categorizer skills share one Excel template: `#`, (timestamp), title/caption, page/author, URL, type, category, summary, confidence, `Detail`, and an always-empty `Note` column as the last column for your own notes.
 - The destructive skills (`facebook-unsave`, `messenger-unsend`) never run without a numbered list and an explicit yes, and skip anything uncertain.
 
